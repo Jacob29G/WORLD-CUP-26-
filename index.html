@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WC2026 - Collector Pro Ultimate V3</title>
+    <title>WC2026 - Collector Pro Ultimate V4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        body { font-family: 'Montserrat', sans-serif; color: white; margin: 0; overflow-x: hidden; }
+        body { font-family: 'Montserrat', sans-serif; color: white; margin: 0; overflow-x: hidden; background-color: #080808;}
         .rajdhani { font-family: 'Rajdhani', sans-serif; }
         
-        /* VIDEO BACKGROUND */
+        /* VIDEO BACKGROUND FIX (Servidores Mixkit) */
         .video-bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; background: #080808; }
-        .video-bg { min-width: 100%; min-height: 100%; object-fit: cover; opacity: 0.4; filter: blur(3px) brightness(0.6); transition: opacity 0.5s ease; }
+        .video-bg { min-width: 100%; min-height: 100%; object-fit: cover; opacity: 0.3; filter: blur(2px) brightness(0.5); transition: opacity 0.5s ease; }
         
         .panini-pattern { background: linear-gradient(90deg, #ef4444 16%, #3b82f6 33%, #22c55e 50%, #eab308 66%, #a855f7 83%, #06b6d4 100%); height: 4px; }
         
@@ -24,62 +24,58 @@
         .watermark { position: absolute; bottom: 8px; width: 100%; text-align: center; font-size: 8px; font-weight: bold; pointer-events: none; opacity: 0.6; }
 
         /* ESTILOS DE CROMO */
-        .style-gold { border-image: linear-gradient(135deg, #e5c064 0%, #a67c22 100%) 1; color: black; font-weight: 700; }
+        .style-gold { border-image: linear-gradient(135deg, #e5c064 0%, #a67c22 100%) 1; }
         .style-gold #card-inner { background: linear-gradient(135deg, #f0ca72 0%, #d4af37 100%); border-color: #f7e0a2; }
-        .style-gold .text-on-card { color: black; }
         .style-gold .border-on-card { border-color: rgba(0,0,0,0.3); }
 
         .style-icon { border-image: linear-gradient(135deg, #ffffff 0%, #dcdcdc 100%) 1; }
         .style-icon #card-inner { background: #fdfdfd; background-image: linear-gradient(rgba(240, 240, 240, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(240, 240, 240, 0.4) 1px, transparent 1px); background-size: 10px 10px; border-color: #f1ebd7; }
-        .style-icon .text-on-card { color: #8e7343; }
         .style-icon .border-on-card { border-color: #ede2c3; }
 
         .style-toty { border-image: linear-gradient(135deg, #223c94 0%, #15225c 100%) 1; }
         .style-toty #card-inner { background: #1a2d7c; }
-        .style-toty .text-on-card { color: #f9e693; }
         .style-toty .border-on-card { border-color: rgba(249, 230, 147, 0.3); }
 
         .style-futties { border-image: linear-gradient(135deg, #eb34e1 0%, #460c5c 100%) 1; }
         .style-futties #card-inner { background: linear-gradient(160deg, #b01eb0 0%, #290842 100%); }
-        .style-futties .text-on-card { color: #f0f0f0; }
         .style-futties .border-on-card { border-color: rgba(255,255,255,0.2); }
 
         .style-freeze { border-image: linear-gradient(135deg, #32e1ff 0%, #10427c 100%) 1; }
         .style-freeze #card-inner { background: #2f8baf; border-color: #a4eaff; }
-        .style-freeze .text-on-card { color: white; }
         .style-freeze .border-on-card { border-color: #8be0ff; }
+        
+        /* FIX DE COLOR DE LETRA (Todo blanco con sombra para resaltar) */
+        .text-on-card { color: #ffffff !important; text-shadow: 0px 2px 5px rgba(0,0,0,0.7); }
         
         .glass { background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
         .modal-active { display: flex !important; animation: fadeModal 0.3s ease forwards; }
         @keyframes fadeModal { from { opacity: 0; } to { opacity: 1; } }
         
-        /* CORRECCIÓN DE LAYOUT DE LA CARTA */
-        /* Stats tipografía bold y limpia */
+        /* CORRECCIÓN DE LAYOUT DE LA CARTA (Alineación) */
         .card-inner .stat-number { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 2.8rem; line-height: 1; margin-bottom: 2px;}
         .card-inner .stat-desc { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 6px;}
 
-        /* FIX GLITCH NOMBRE: Forzar line-height y quitar truncate durante captura */
+        /* FIX GLITCH NOMBRE */
         .safe-name { font-family: 'Montserrat', sans-serif; font-weight: 900; line-height: 1.1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding-bottom: 5px;}
-        .capturing .safe-name { text-overflow: clip; overflow: visible; white-space: normal; word-break: break-word; font-size: 1.2rem; } /* Ajuste dinámico para nombres largos al capturar */
+        .capturing .safe-name { text-overflow: clip; overflow: visible; white-space: normal; word-break: break-word; font-size: 1.2rem; }
 
-        /* Estilo Bandera Reubicada (Debajo del DC) */
-        .flag-container { width: 2.2rem; height: 1.5rem; border: 2px solid; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.4); margin-top: 4px;}
+        /* Estilo Bandera Reubicada */
+        .flag-container { width: 2.2rem; height: 1.5rem; border: 2px solid; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.4); margin-top: 2px;}
         
-        /* Botones de selección estilos */
-        .btn-style { padding: 12px; border-radius: 12px; border: 2px solid transparent; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; position: relative; display: flex; align-items: center; justify-content: center; height: 100%;}
+        .btn-style { padding: 12px; border-radius: 12px; border: 2px solid transparent; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; height: 100%;}
         .btn-style.active { border-color: #eab308; box-shadow: 0 0 15px rgba(234,179,8,0.4); background: rgba(255,255,255,0.1);}
 
-        /* Forzar dimensiones de captura */
         #capture-area { width: 320px; height: 480px; overflow: hidden; display: flex; justify-content: center; align-items: center; padding: 2px; }
 
-        #country-select-ui { cursor: pointer; position: relative; display: inline-flex; align-items: center; }
+        /* FIX DROPDOWN INVISIBLE EN MÓVILES */
+        select option { background-color: #1a1a1a; color: #ffffff; font-weight: bold; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-3 relative">
 
     <div class="video-bg-container">
-        <video id="bg-video" class="video-bg" autoplay loop muted playsinline>
-            <source src="https://cdn.pixabay.com/video/2019/02/13/21356-317180492_large.mp4" type="video/mp4">
+        <video id="bg-video" class="video-bg" autoplay loop muted playsinline crossorigin="anonymous">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-stadium-arena-with-fans-cheering-4444-large.mp4" type="video/mp4">
         </video>
     </div>
 
@@ -93,21 +89,21 @@
                     <div id="capture-area" class="fifa-card style-gold">
                         <div id="card-inner" class="flex flex-col items-center p-4 relative">
                             
-                            <div class="absolute left-4 top-10 flex flex-col items-center z-10">
-                                <span class="text-on-card stat-number">99</span>
-                                <span class="text-on-card stat-desc">DC</span>
+                            <div class="absolute left-2 top-10 flex flex-col items-center z-10 w-16">
+                                <span class="text-on-card stat-number text-center">99</span>
+                                <span class="text-on-card stat-desc text-center">DC</span>
                                 <div class="flag-container border-on-card">
                                     <img id="flag-img" src="https://flagcdn.com/w80/mx.png" alt="MX" class="object-cover w-full h-full">
                                 </div>
                             </div>
                             
-                            <div class="w-36 h-36 mt-4 ml-6 overflow-hidden border-[3px] rounded-full border-on-card flex items-center justify-center shadow-xl bg-black/40 relative z-0">
+                            <div class="w-36 h-36 mt-4 ml-10 overflow-hidden border-[3px] rounded-full border-on-card flex items-center justify-center shadow-xl bg-black/40 relative z-0">
                                 <img id="player-img" src="https://via.placeholder.com/150/ffffff/dddddd?text=SELFIE" class="object-cover w-full h-full">
                             </div>
 
                             <h3 id="card-name" class="text-2xl mt-4 text-on-card uppercase italic w-full text-center px-2 safe-name">TU NOMBRE</h3>
                             
-                            <div class="w-3/4 h-[2px] bg-current opacity-30 my-2 text-on-card"></div>
+                            <div class="w-3/4 h-[2px] bg-white opacity-40 my-2 shadow-[0_2px_4px_rgba(0,0,0,0.5)]"></div>
 
                             <div class="grid grid-cols-2 gap-x-8 gap-y-1.5 text-[11.5px] mt-2 font-bold w-full px-6 text-on-card rajdhani">
                                 <div class="flex justify-between border-l-[3px] border-red-500 pl-2"><span>RIT</span> <span>99</span></div>
@@ -127,8 +123,8 @@
             <div class="space-y-4">
                 <div>
                     <div class="grid grid-cols-5 gap-2 h-12">
-                        <button onclick="changeStyle('gold')" class="btn-style style-gold text-black active" id="btn-gold"><span>ORO</span></button>
-                        <button onclick="changeStyle('icon')" class="btn-style style-icon text-black" id="btn-icon"><span>ICON</span></button>
+                        <button onclick="changeStyle('gold')" class="btn-style style-gold text-white active" id="btn-gold"><span>ORO</span></button>
+                        <button onclick="changeStyle('icon')" class="btn-style style-icon text-white" id="btn-icon"><span>ICON</span></button>
                         <button onclick="changeStyle('toty')" class="btn-style style-toty text-white" id="btn-toty"><span>TOTY</span></button>
                         <button onclick="changeStyle('futties')" class="btn-style style-futties text-white" id="btn-futties"><span>FUTTIES</span></button>
                         <button onclick="changeStyle('freeze')" class="btn-style style-freeze text-white" id="btn-freeze"><span>FREEZE</span></button>
@@ -145,25 +141,27 @@
                             <input type="file" id="image-input" class="hidden" accept="image/*">
                         </label>
 
-                        <div id="country-select-ui" class="w-full p-4 bg-white/10 rounded-xl border border-white/30 flex flex-col justify-center text-center">
+                        <div class="w-full p-4 bg-white/10 rounded-xl border border-white/30 flex flex-col justify-center text-center relative">
                              <span class="text-xs text-gray-300 font-bold mb-1">Paso 2: Nación</span>
                             <select id="country-select" class="bg-transparent text-white font-bold outline-none cursor-pointer text-center w-full appearance-none">
                                 <optgroup label="Anfitriones 2026">
                                     <option value="mx" selected>México</option>
-                                    <option value="us">EE.UU.</option>
+                                    <option value="us">Estados Unidos</option>
                                     <option value="ca">Canadá</option>
                                 </optgroup>
-                                <optgroup label="América">
+                                <optgroup label="Sudamérica (CONMEBOL)">
                                     <option value="ar">Argentina</option>
                                     <option value="br">Brasil</option>
                                     <option value="co">Colombia</option>
-                                    <option value="pe">Perú</option>
-                                    <option value="cl">Chile</option>
                                     <option value="uy">Uruguay</option>
                                     <option value="ec">Ecuador</option>
                                     <option value="ve">Venezuela</option>
+                                    <option value="pe">Perú</option>
+                                    <option value="cl">Chile</option>
+                                    <option value="py">Paraguay</option>
+                                    <option value="bo">Bolivia</option>
                                 </optgroup>
-                                <optgroup label="Europa">
+                                <optgroup label="Europa (UEFA)">
                                     <option value="es">España</option>
                                     <option value="fr">Francia</option>
                                     <option value="de">Alemania</option>
@@ -171,12 +169,29 @@
                                     <option value="gb-eng">Inglaterra</option>
                                     <option value="pt">Portugal</option>
                                     <option value="nl">Países Bajos</option>
+                                    <option value="be">Bélgica</option>
+                                    <option value="hr">Croacia</option>
+                                    <option value="dk">Dinamarca</option>
+                                    <option value="ch">Suiza</option>
+                                    <option value="rs">Serbia</option>
+                                    <option value="pl">Polonia</option>
                                 </optgroup>
-                                <optgroup label="Asia & África">
-                                    <option value="jp">Japón</option>
-                                    <option value="kr">Corea del Sur</option>
+                                <optgroup label="Norte/Centroamérica">
+                                    <option value="cr">Costa Rica</option>
+                                    <option value="pa">Panamá</option>
+                                    <option value="jm">Jamaica</option>
+                                    <option value="hn">Honduras</option>
+                                </optgroup>
+                                <optgroup label="África & Asia">
                                     <option value="ma">Marruecos</option>
                                     <option value="sn">Senegal</option>
+                                    <option value="eg">Egipto</option>
+                                    <option value="ng">Nigeria</option>
+                                    <option value="jp">Japón</option>
+                                    <option value="kr">Corea del Sur</option>
+                                    <option value="sa">Arabia Saudita</option>
+                                    <option value="ir">Irán</option>
+                                    <option value="au">Australia</option>
                                 </optgroup>
                             </select>
                         </div>
@@ -195,13 +210,11 @@
             <div class="text-6xl mb-4">🏆</div>
             <h2 class="text-2xl font-black mb-2 text-yellow-500 rajdhani">¡DESCARGA EXITOSA!</h2>
             <p class="text-gray-300 text-xs mb-6">Tu versión con marca de agua está en tu galería. ¿Quieres el <b>Pase Pro</b>?</p>
-            
             <ul class="text-left text-xs space-y-3 mb-8 text-gray-200">
                 <li class="flex items-center"><span class="text-green-500 mr-2 font-bold text-lg">✓</span> Quitar Marca de Agua</li>
                 <li class="flex items-center"><span class="text-green-500 mr-2 font-bold text-lg">✓</span> Desbloquear Diseños Premium</li>
                 <li class="flex items-center"><span class="text-green-500 mr-2 font-bold text-lg">✓</span> Intercambio (Trade) Activado</li>
             </ul>
-
             <button onclick="window.location.href='#'" class="w-full py-4 bg-yellow-500 text-black font-black rounded-xl uppercase mb-3 shadow-xl">
                 OBTENER PASE - $5 USD
             </button>
@@ -212,7 +225,6 @@
     </div>
 
     <script>
-        // ... (Referencias DOM iguales) ...
         const nameInput = document.getElementById('name-input');
         const cardName = document.getElementById('card-name');
         const imageInput = document.getElementById('image-input');
@@ -244,18 +256,17 @@
             styleButtons.forEach(btn => btn.classList.remove('active'));
             document.getElementById(`btn-${styleName}`).classList.add('active');
 
-            // Lógica de Fondos de Video Dinámicos según el estilo
-            bgVideo.style.opacity = 0; // Fade out
+            bgVideo.style.opacity = 0; 
             setTimeout(() => {
                 if(styleName === 'gold' || styleName === 'icon') {
-                    bgVideo.src = "https://cdn.pixabay.com/video/2019/02/13/21356-317180492_large.mp4"; // Estadio de día
-                } else if (styleName === 'toty') {
-                    bgVideo.src = "https://cdn.pixabay.com/video/2020/02/24/32832-393936665_large.mp4"; // Noche/Luces
+                    bgVideo.src = "https://assets.mixkit.co/videos/preview/mixkit-stadium-arena-with-fans-cheering-4444-large.mp4"; 
+                } else if (styleName === 'toty' || styleName === 'freeze') {
+                    bgVideo.src = "https://assets.mixkit.co/videos/preview/mixkit-soccer-ball-on-the-grass-of-a-stadium-in-the-4171-large.mp4";
                 } else {
-                    bgVideo.src = "https://cdn.pixabay.com/video/2018/01/21/13840-252157121_large.mp4"; // Abstracto/Partículas
+                    bgVideo.src = "https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-connection-background-fast-moving-lines-4187-large.mp4"; 
                 }
-                bgVideo.play();
-                bgVideo.style.opacity = 0.4; // Fade in
+                bgVideo.play().catch(e => console.log("Auto-play prevenido por el navegador"));
+                bgVideo.style.opacity = 0.3; 
             }, 500);
         }
 
@@ -264,11 +275,6 @@
             downloadFree.innerText = 'GENERANDO...';
             downloadFree.classList.add('opacity-75', 'cursor-not-allowed');
 
-            if(captureArea.classList.contains('style-gold')){
-                captureArea.classList.add('text-black'); 
-            }
-
-            // FIX GLITCH NOMBRE: Añadir clase que quita el truncate antes de la foto
             cardName.classList.add('capturing');
 
             html2canvas(captureArea, {
@@ -277,7 +283,6 @@
                 logging: false,
                 useCORS: true
             }).then(canvas => {
-                // Restaurar el diseño web normal
                 cardName.classList.remove('capturing');
                 
                 const link = document.createElement('a');
