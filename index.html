@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WC2026 - Collector Pro Ultimate</title>
+    <title>WC2026 - Collector Pro Ultimate V2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -12,59 +12,69 @@
         .rajdhani { font-family: 'Rajdhani', sans-serif; }
         .panini-pattern { background: linear-gradient(90deg, #ef4444 16%, #3b82f6 33%, #22c55e 50%, #eab308 66%, #a855f7 83%, #06b6d4 100%); height: 4px; }
         
-        /* MECÁNICA DE LA CARTA (Procedural CSS) */
-        .card-container { transition: transform 0.2s ease-out; cursor: move; position: relative; }
-        .fifa-card { clip-path: polygon(10% 0, 90% 0, 100% 15%, 100% 85%, 50% 100%, 0 85%, 0 15%); position: relative; transition: all 0.5s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        /* MECÁNICA DE LA CARTA (Corregida para Aspect Ratio Perfecta) */
+        .card-wrapper { display: flex; justify-content: center; align-items: center; position: relative; }
+        .fifa-card { clip-path: polygon(10% 0, 90% 0, 100% 15%, 100% 85%, 50% 100%, 0 85%, 0 15%); position: relative; transition: all 0.5s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
         .card-inner { background: rgba(0,0,0,0.3); width: 100%; height: 100%; border: 4px solid transparent; clip-path: inherit; transition: all 0.5s ease; position: relative; overflow: hidden;}
         
-        /* MARCA DE AGUA (Reubicada) */
-        .watermark { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 8px; font-weight: bold; pointer-events: none; opacity: 0.7; }
+        /* MARCA DE AGUA (Corregida, no interfiere) */
+        .watermark { position: absolute; bottom: 8px; width: 100%; text-align: center; font-size: 8px; font-weight: bold; pointer-events: none; opacity: 0.6; }
 
-        /* LOS 5 ESTILOS DE CUSTOMIZACIÓN */
-
-        /* 1. Oro Estándar */
+        /* ESTILOS DE CROMO (Puliendo bordes y textos) */
         .style-gold { border-image: linear-gradient(135deg, #e5c064 0%, #a67c22 100%) 1; color: black; font-weight: 700; }
         .style-gold #card-inner { background: linear-gradient(135deg, #f0ca72 0%, #d4af37 100%); border-color: #f7e0a2; }
         .style-gold .text-on-card { color: black; }
         .style-gold .border-on-card { border-color: rgba(0,0,0,0.3); }
 
-        /* 2. Icono - Crema/Dorado */
         .style-icon { border-image: linear-gradient(135deg, #ffffff 0%, #dcdcdc 100%) 1; }
-        .style-icon #card-inner { background: #fdfdfd; background-image: linear-gradient(rgba(240, 240, 240, 0.4) 2px, transparent 2px), linear-gradient(90deg, rgba(240, 240, 240, 0.4) 2px, transparent 2px); background-size: 15px 15px; border-color: #f1ebd7; }
+        .style-icon #card-inner { background: #fdfdfd; background-image: linear-gradient(rgba(240, 240, 240, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(240, 240, 240, 0.3) 1px, transparent 1px); background-size: 10px 10px; border-color: #f1ebd7; }
         .style-icon .text-on-card { color: #8e7343; }
         .style-icon .border-on-card { border-color: #ede2c3; }
 
-        /* 3. TOTY - Azul Profundo */
         .style-toty { border-image: linear-gradient(135deg, #223c94 0%, #15225c 100%) 1; }
-        .style-toty #card-inner { background: #1a2d7c; position: relative; }
-        .style-toty #card-inner::before { content: ''; position: absolute; top: -100px; left: -100px; width: 300px; height: 300px; background: linear-gradient(150deg, rgba(255,255,255,0.05) 10%, rgba(255, 230, 163, 0.3) 30%, rgba(255,255,255,0.05) 50%); animation: lightning 5s infinite ease-in-out; }
+        .style-toty #card-inner { background: #1a2d7c; }
         .style-toty .text-on-card { color: #f9e693; }
         .style-toty .border-on-card { border-color: rgba(249, 230, 147, 0.3); }
-        @keyframes lightning { 0%, 100% { transform: skewX(-15deg) translate(-10%, -10%); opacity: 0; } 50% { transform: skewX(-15deg) translate(20%, 20%); opacity: 1; } }
 
-        /* 4. Futties - Púrpura/Rosa Vibrante */
         .style-futties { border-image: linear-gradient(135deg, #eb34e1 0%, #460c5c 100%) 1; }
-        .style-futties #card-inner { background: linear-gradient(160deg, #b01eb0 0%, #290842 100%); position: relative; }
+        .style-futties #card-inner { background: linear-gradient(160deg, #b01eb0 0%, #290842 100%); }
         .style-futties .text-on-card { color: #f0f0f0; }
         .style-futties .border-on-card { border-color: rgba(255,255,255,0.2); }
 
-        /* 5. Freeze - Hielo/Cristal */
         .style-freeze { border-image: linear-gradient(135deg, #32e1ff 0%, #10427c 100%) 1; }
-        .style-freeze #card-inner { background: #2f8baf; border-color: #a4eaff; position: relative; }
+        .style-freeze #card-inner { background: #2f8baf; border-color: #a4eaff; }
         .style-freeze .text-on-card { color: white; }
         .style-freeze .border-on-card { border-color: #8be0ff; }
         
         .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); }
-        .modal-active { display: flex !important; animation: fadeModal 0.4s ease forwards; }
+        .modal-active { display: flex !important; animation: fadeModal 0.3s ease forwards; }
         @keyframes fadeModal { from { opacity: 0; } to { opacity: 1; } }
         
-        .card-inner .stat-number { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 2.2rem; }
-        .card-inner .stat-desc { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; letter-spacing: -0.5px;}
+        /* Stats tipografía bold y limpia */
+        .card-inner .stat-number { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 2.3rem; }
+        .card-inner .stat-desc { font-family: 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: -0.8px;}
 
-        /* Botones de selección */
+        /* Botones de selección estilos */
         .btn-style { padding: 12px; rounded: 12px; border: 2px solid transparent; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; position: relative; display: flex; align-items: center; justify-content: center; height: 100%;}
         .btn-style.active { border-color: #eab308; box-shadow: 0 0 15px rgba(234,179,8,0.3); }
-        .btn-style span { position: relative; z-index: 2; }
+
+        /* Estilo Bandera "Fina" y Reubicada */
+        .flag-container { width: 1.6rem; height: 1.1rem; border: 2px solid; rounded: 3px; overflow: hidden; display: flex; items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.3); position: absolute; left: 1rem; top: 3rem; }
+        
+        /* Forzar dimensiones correctas en el contenedor de captura */
+        #capture-area {
+            width: 320px;
+            height: 480px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            p: 1px;
+        }
+
+        /* Ocultar el dropdown nativo de selección de país pero mantenerlo accesible al click */
+        #country-select-ui { cursor: pointer; position: relative; display: inline-flex; align-items: center; }
+
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-3">
@@ -75,34 +85,34 @@
             <h1 class="text-2xl font-black text-center mb-6 tracking-tighter italic rajdhani">WC2026 <span class="text-yellow-500">COLLECTOR PRO</span></h1>
 
             <div class="flex justify-center mb-6 relative">
-                <div class="card-container">
-                    <div id="capture-area" class="fifa-card w-64 h-96 style-gold p-[2px]">
-                        <div id="card-inner" class="flex flex-col items-center p-4 relative">
-                            <div class="absolute left-3 top-8 flex flex-col items-center">
+                <div class="card-wrapper">
+                    <div id="capture-area" class="fifa-card style-gold p-[2px]">
+                        <div id="card-inner" class="flex flex-col items-center p-5 relative">
+                            <div class="absolute left-4 top-10 flex flex-col items-center">
                                 <span class="text-5xl font-black leading-none text-on-card stat-number">99</span>
                                 <span class="text-sm font-bold leading-none text-on-card stat-desc">DC</span>
                             </div>
                             
-                            <div class="w-32 h-32 mt-3 overflow-hidden border-2 rounded-full border-on-card flex items-center justify-center shadow-lg bg-black/20">
+                            <div class="w-32 h-32 mt-5 overflow-hidden border-2 rounded-full border-on-card flex items-center justify-center shadow-lg bg-black/20 relative">
                                 <img id="player-img" src="https://via.placeholder.com/150/ffffff/dddddd?text=SELFIE" class="object-cover w-full h-full">
                             </div>
 
-                            <h3 id="card-name" class="text-2xl font-black mt-2 text-on-card uppercase italic truncate w-full text-center px-1">YOUR NAME</h3>
+                            <div class="flag-container border-on-card absolute -right-2 top-10 transform -translate-y-1/2 p-[2px] bg-white/20">
+                                <img id="flag-img" src="https://flagcdn.com/w80/mx.png" alt="MX" class="object-cover w-full h-full rounded-sm">
+                            </div>
+
+                            <h3 id="card-name" class="text-2xl font-black mt-3 text-on-card uppercase italic truncate w-full text-center px-1">YOUR NAME</h3>
                             
-                            <div class="w-10 h-10 absolute right-4 bottom-[90px] border-2 rounded-md border-on-card p-[2px] flex items-center justify-center bg-white/20 shadow-md">
-                                <img src="https://flagcdn.com/w80/mx.png" class="object-cover w-full h-full rounded-sm">
+                            <div class="grid grid-cols-2 gap-x-6 gap-y-1 text-[11px] mt-6 font-bold border-t-2 border-on-card pt-3 w-full px-5 text-on-card rajdhani">
+                                <div class="flex justify-between border-l-2 border-red-500 pl-1"><span>RIT</span> <span>99</span></div>
+                                <div class="flex justify-between border-l-2 border-blue-500 pl-1"><span>REG</span> <span>99</span></div>
+                                <div class="flex justify-between border-l-2 border-green-500 pl-1"><span>TIR</span> <span>99</span></div>
+                                <div class="flex justify-between border-l-2 border-yellow-500 pl-1"><span>DEF</span> <span>99</span></div>
+                                <div class="flex justify-between border-l-2 border-purple-500 pl-1"><span>PAS</span> <span>99</span></div>
+                                <div class="flex justify-between border-l-2 border-cyan-500 pl-1"><span>FÍS</span> <span>99</span></div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-x-5 gap-y-1 text-xs mt-6 font-bold border-t-2 border-on-card pt-3 w-full px-5 text-on-card rajdhani">
-                                <div class="flex justify-between"><span>RIT</span> <span>99</span></div>
-                                <div class="flex justify-between"><span>TIR</span> <span>99</span></div>
-                                <div class="flex justify-between"><span>PAS</span> <span>99</span></div>
-                                <div class="flex justify-between"><span>REG</span> <span>99</span></div>
-                                <div class="flex justify-between"><span>DEF</span> <span>99</span></div>
-                                <div class="flex justify-between"><span>FÍS</span> <span>99</span></div>
-                            </div>
-
-                            <div class="watermark text-on-card rajdhani">WC26CARDS.COM</div>
+                            <div class="watermark text-on-card rajdhani">CREADO EN WC26CARDS.COM</div>
                         </div>
                     </div>
                 </div>
@@ -122,18 +132,27 @@
 
                 <div class="space-y-4">
                     <input type="text" id="name-input" placeholder="Tu nombre artístico" maxlength="15" class="w-full p-4 bg-white/5 rounded-xl border border-white/10 outline-none focus:border-yellow-500 font-bold text-lg focus:ring-2 focus:ring-yellow-500/10">
+                    
                     <label class="block w-full p-4 bg-white text-center rounded-xl cursor-pointer hover:bg-gray-100 border border-dashed border-gray-300 shadow-inner">
                         <span class="text-base text-black font-black uppercase">CARGAR TU FOTO (Selfie)</span>
                         <input type="file" id="image-input" class="hidden" accept="image/*">
                     </label>
+
+                    <div id="country-select-ui" class="w-full p-4 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center text-sm">
+                        <span class="text-gray-400">Selección Nacional (Anfitrión):</span>
+                        <select id="country-select" class="bg-transparent text-yellow-500 font-bold outline-none cursor-pointer text-right">
+                            <option value="mx" selected>México</option>
+                            <option value="us">EE.UU.</option>
+                            <option value="ca">Canadá</option>
+                        </select>
+                    </div>
+
                     <button id="download-free" class="w-full py-5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-black rounded-2xl uppercase tracking-widest text-base shadow-xl hover:scale-[1.02] transition">
-                        Descargar Mi Carta (Gratis)
+                        Descargar Mi Cromo Gratis
                     </button>
                 </div>
             </div>
         </div>
-        
-        <div class="panini-pattern"></div>
     </div>
 
     <div id="upsell-modal" class="fixed inset-0 bg-black/95 z-50 hidden flex-col items-center justify-center p-6 text-center animate-fade-in">
@@ -167,6 +186,8 @@
         const captureArea = document.getElementById('capture-area');
         const modal = document.getElementById('upsell-modal');
         const styleButtons = document.querySelectorAll('.btn-style');
+        const countrySelect = document.getElementById('country-select');
+        const flagImg = document.getElementById('flag-img');
 
         nameInput.addEventListener('input', (e) => {
             cardName.innerText = e.target.value.toUpperCase() || "YOUR NAME";
@@ -178,7 +199,7 @@
             reader.readAsDataURL(this.files[0]);
         });
 
-        // CAMBIO DE ESTILO PROCEDURAL
+        // MECÁNICA DE CAMBIO DE ESTILO (Puliendo bordes)
         function changeStyle(styleName) {
             captureArea.classList.remove('style-gold', 'style-icon', 'style-toty', 'style-futties', 'style-freeze');
             captureArea.parentElement.classList.remove('text-black', 'text-white');
@@ -189,27 +210,67 @@
             document.getElementById(`btn-${styleName}`).classList.add('active');
         }
 
+        // NUEVA FUNCIÓN: Selección de Nacionalidad
+        countrySelect.addEventListener('change', function() {
+            const countryCode = this.value;
+            flagImg.src = `https://flagcdn.com/w80/${countryCode}.png`;
+        });
+
+        // MECÁNICA DE DESCARGA ARREGLADA (Previene aplastamiento)
         downloadFree.addEventListener('click', () => {
+            
+            // Efecto visual en el botón
+            const originalText = downloadFree.innerText;
+            downloadFree.innerText = 'GENERANDO CROMO...';
+            downloadFree.classList.add('opacity-75', 'cursor-not-allowed');
+
             // Asegurar que el texto sea negro si es Oro para que sea legible en la descarga
             if(captureArea.classList.contains('style-gold')){
                 captureArea.classList.add('text-black'); 
             }
 
+            // TRUCO DE CRECIMIENTO: html2canvas toma la "foto" del div con dimensiones fijas.
+            // Para asegurar alta resolución en móviles sin distorsión, forzamos dimensiones exactas
+            // durante la captura y luego las removemos.
+            
+            // Forzar dimensiones de captura de alta resolución
+            const oldWidth = captureArea.style.width;
+            const oldHeight = captureArea.style.height;
+            captureArea.style.width = '320px';
+            captureArea.style.height = '480px';
+
             html2canvas(captureArea, {
-                scale: 2, 
+                scale: 3, // ALTA RESOLUCIÓN (4K Print Ready si pagan)
                 backgroundColor: null,
                 logging: false,
-                useCORS: true
+                useCORS: true,
+                onclone: (clonedDoc) => {
+                    // Asegurar que el clon de la captura mantenga la estética correcta
+                    clonedDoc.getElementById('capture-area').style.aspectRatio = 'auto';
+                }
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `mi-cromo-gratis_${cardName.innerText}.png`;
-                link.href = canvas.toDataURL();
+                link.download = `WC2026_CromoGratis_${cardName.innerText}.png`;
+                link.href = canvas.toDataURL('image/png');
                 link.click();
+                
+                // Restaurar botón
+                downloadFree.innerText = originalText;
+                downloadFree.classList.remove('opacity-75', 'cursor-not-allowed');
+
+                // Restaurar dimensiones originales si las hubiera (en nuestro caso son responsivas)
+                captureArea.style.width = oldWidth;
+                captureArea.style.height = oldHeight;
                 
                 // DISPARAR EL MODAL DE UPSELL
                 setTimeout(() => {
                     modal.classList.add('modal-active');
                 }, 1800);
+            }).catch(err => {
+                console.error("Error generating image: ", err);
+                alert("Hubo un error al generar tu cromo. Intenta de nuevo.");
+                downloadFree.innerText = originalText;
+                downloadFree.classList.remove('opacity-75', 'cursor-not-allowed');
             });
         });
     </script>
