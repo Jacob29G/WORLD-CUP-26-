@@ -11,7 +11,7 @@
         body { font-family: 'Montserrat', sans-serif; color: white; margin: 0; overflow-x: hidden; background-color: #080808;}
         .rajdhani { font-family: 'Rajdhani', sans-serif; }
         
-        /* VIDEO BACKGROUND FIX (Servidores Mixkit) */
+        /* VIDEO BACKGROUND FIX (Servidores Seguros Mixkit) */
         .video-bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; background: #080808; }
         .video-bg { min-width: 100%; min-height: 100%; object-fit: cover; opacity: 0.3; filter: blur(2px) brightness(0.5); transition: opacity 0.5s ease; }
         
@@ -44,14 +44,14 @@
         .style-freeze #card-inner { background: #2f8baf; border-color: #a4eaff; }
         .style-freeze .border-on-card { border-color: #8be0ff; }
         
-        /* FIX DE COLOR DE LETRA (Todo blanco con sombra para resaltar) */
+        /* FIX DE COLOR DE LETRA ORO/ICON (Todo blanco con sombra) */
         .text-on-card { color: #ffffff !important; text-shadow: 0px 2px 5px rgba(0,0,0,0.7); }
         
         .glass { background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
         .modal-active { display: flex !important; animation: fadeModal 0.3s ease forwards; }
         @keyframes fadeModal { from { opacity: 0; } to { opacity: 1; } }
         
-        /* CORRECCIÓN DE LAYOUT DE LA CARTA (Alineación) */
+        /* CORRECCIÓN DE LAYOUT DE LA CARTA (Alineación '99 DC') */
         .card-inner .stat-number { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 2.8rem; line-height: 1; margin-bottom: 2px;}
         .card-inner .stat-desc { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 6px;}
 
@@ -59,7 +59,7 @@
         .safe-name { font-family: 'Montserrat', sans-serif; font-weight: 900; line-height: 1.1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding-bottom: 5px;}
         .capturing .safe-name { text-overflow: clip; overflow: visible; white-space: normal; word-break: break-word; font-size: 1.2rem; }
 
-        /* Estilo Bandera Reubicada */
+        /* Estilo Bandera Reubicada (Debajo del DC) */
         .flag-container { width: 2.2rem; height: 1.5rem; border: 2px solid; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.4); margin-top: 2px;}
         
         .btn-style { padding: 12px; border-radius: 12px; border: 2px solid transparent; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; height: 100%;}
@@ -67,7 +67,7 @@
 
         #capture-area { width: 320px; height: 480px; overflow: hidden; display: flex; justify-content: center; align-items: center; padding: 2px; }
 
-        /* FIX DROPDOWN INVISIBLE EN MÓVILES */
+        /* FIX DROPDOWN INVISIBLE EN MÓVILES (Legibilidad para niños) */
         select option { background-color: #1a1a1a; color: #ffffff; font-weight: bold; }
     </style>
 </head>
@@ -176,23 +176,6 @@
                                     <option value="rs">Serbia</option>
                                     <option value="pl">Polonia</option>
                                 </optgroup>
-                                <optgroup label="Norte/Centroamérica">
-                                    <option value="cr">Costa Rica</option>
-                                    <option value="pa">Panamá</option>
-                                    <option value="jm">Jamaica</option>
-                                    <option value="hn">Honduras</option>
-                                </optgroup>
-                                <optgroup label="África & Asia">
-                                    <option value="ma">Marruecos</option>
-                                    <option value="sn">Senegal</option>
-                                    <option value="eg">Egipto</option>
-                                    <option value="ng">Nigeria</option>
-                                    <option value="jp">Japón</option>
-                                    <option value="kr">Corea del Sur</option>
-                                    <option value="sa">Arabia Saudita</option>
-                                    <option value="ir">Irán</option>
-                                    <option value="au">Australia</option>
-                                </optgroup>
                             </select>
                         </div>
                     </div>
@@ -251,22 +234,25 @@
             flagImg.src = `https://flagcdn.com/w80/${this.value}.png`;
         });
 
+        // Lógica de Fondos Dinámicos
         function changeStyle(styleName) {
             captureArea.className = `fifa-card style-${styleName}`;
             styleButtons.forEach(btn => btn.classList.remove('active'));
             document.getElementById(`btn-${styleName}`).classList.add('active');
 
+            // Fade out video
             bgVideo.style.opacity = 0; 
             setTimeout(() => {
+                // Cambiar el video según el estilo
                 if(styleName === 'gold' || styleName === 'icon') {
-                    bgVideo.src = "https://assets.mixkit.co/videos/preview/mixkit-stadium-arena-with-fans-cheering-4444-large.mp4"; 
+                    bgVideo.src = "https://assets.mixkit.co/videos/preview/mixkit-stadium-arena-with-fans-cheering-4444-large.mp4"; // Estadio de día
                 } else if (styleName === 'toty' || styleName === 'freeze') {
-                    bgVideo.src = "https://assets.mixkit.co/videos/preview/mixkit-soccer-ball-on-the-grass-of-a-stadium-in-the-4171-large.mp4";
+                    bgVideo.src = "https://assets.mixkit.co/videos/preview/mixkit-soccer-ball-on-the-grass-of-a-stadium-in-the-4171-large.mp4"; // Estadio de noche
                 } else {
-                    bgVideo.src = "https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-connection-background-fast-moving-lines-4187-large.mp4"; 
+                    bgVideo.src = "https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-connection-background-fast-moving-lines-4187-large.mp4"; // Futties: Abstracto
                 }
                 bgVideo.play().catch(e => console.log("Auto-play prevenido por el navegador"));
-                bgVideo.style.opacity = 0.3; 
+                bgVideo.style.opacity = 0.3; // Fade in
             }, 500);
         }
 
@@ -275,14 +261,19 @@
             downloadFree.innerText = 'GENERANDO...';
             downloadFree.classList.add('opacity-75', 'cursor-not-allowed');
 
+            // Asegurar que el texto sea blanco para la descarga
+            captureArea.classList.add('text-white'); 
+
+            // FIX GLITCH NOMBRE: Añadir clase que quita el truncate antes de la foto
             cardName.classList.add('capturing');
 
             html2canvas(captureArea, {
-                scale: 3, 
+                scale: 3, // Alta resolución para descarga
                 backgroundColor: null,
                 logging: false,
                 useCORS: true
             }).then(canvas => {
+                // Restaurar el diseño web normal
                 cardName.classList.remove('capturing');
                 
                 const link = document.createElement('a');
